@@ -1,0 +1,302 @@
+<html>
+	<head>
+		<title>Songs</title>
+		<link rel='stylesheet' type='text/css' href='/css/jquery.dataTables.css'></link>
+		<link rel='stylesheet' type='text/css' href='/css/jquery.dataTables.yadcf.css'></link>
+		<link href="/jqp/skin/pink.flag/jplayer.pink.flag.css" rel="stylesheet" type="text/css" />
+		<!--<link rel="stylesheet" type="text/css" href="/css/style.css" /> -->
+		<style>
+			#header {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 30px;
+				line-height: 30px;
+				margin: 0px 0 0 0;
+				background: #f42555 url('/images/navbg.jpg');
+				border: solid 1px #EA2E5A;
+				font-family: 'PT Sans Narrow', sans-serif;
+				font-size: 1.2em;
+				color: white;
+			}
+			#footer {
+				top: 96%;
+				position: fixed;
+				left: 0;
+				width: 100%;
+				height: 25px;
+				line-height: 25px;
+				margin: 0px 0 0 0;
+				background: #f42555 url('/images/navbg.jpg');
+				border: solid 1px #EA2E5A;
+				font-family: 'PT Sans Narrow', sans-serif;
+				font-size: 1.2em;
+				color: white;
+			}
+			.top {
+				width: 63%;
+				height: 105px;
+				position: fixed; 
+				top: 35px; 
+				left: 5px;
+				background: #abdbe7;
+				border: #eedbee solid 1px;
+			}
+			.table_content {
+				margin-top: 115px;
+				height : 75%;
+				overflow: auto;
+				margin-left:-10px;
+				width : 106%;
+			}
+			#my_combo {
+				margin-top:70px;
+			}
+			#ip_tag {
+				margin-top:-10px;
+				margin-left: 600px;
+			}
+		</style>
+		<script src='/js/jquery-1.10.2.min.js' type='text/javascript'></script>
+		<script src='/js/jquery-ui.min.js' type='text/javascript'></script>
+		<script src='/js/jquery.dataTables.js' type='text/javascript'></script>
+		<script src='/js/jquery.dataTables.yadcf.js' type='text/javascript'></script>
+		<script type="text/javascript" src="/jqp/js/jquery.jplayer.min.js"></script>
+		<script type="text/javascript" src="/jqp/js/jplayer.playlist.min.js"></script>
+		<script type='text/javascript'> 
+			$(document).ready(function() { 
+				$.ajax({
+					type: "GET",
+					url: "/perl/my_ip",
+					dataType: "text",
+					success: function(data) {
+						$('#ip_tag').html("You are accessing from IP: " + data);
+					}
+				});
+
+				var songs_table = $('#songs').dataTable({
+					"sDom": '<"top"if><"table_content"t><"clear">',
+					"bPaginate" : false,
+					"bautoWidth" : false,
+					"ajax": '/songs_list/Ajith_hits.list',
+					"createdRow": function ( row, data, index ) {
+						var url = $('td',row).eq(3).html();
+						var play = '<a href="' + url + '" onClick="return false" class="play_song">Play</a>&nbsp;' ;
+						var queue = '<a href="' + url + '" onClick="return false" class="add_song">Queue</a>&nbsp;<br/>';
+						var download = '<a href="'+ url + '" download>Download</a>';
+						$('td',row).eq(3).html( play + queue + download);
+					}
+				});/*.yadcf([{
+					column_number: 0, filter_type: "auto_complete"
+				}, {
+					column_number: 1, filter_type: "auto_complete"
+				}, {
+					column_number: 2, filter_type: "auto_complete"
+					}]);*/
+
+					var folders = "<div id='my_combo'>Choose Folder: <select id='folder'>" +
+						"<option value='Ajith_hits'>Ajith hits</option>" +
+						"<option value='Arjun_hits'>Arjun hits</option>" +
+						"<option value='A_R_Rahman'>A R Rahman</option>" +
+						"<option value='collections'>collections</option>" +
+						"<option value='DHLIP_VARMAN'>DHLIP VARMAN</option>" +
+						"<option value='Film_Wise'>Film Wise</option>" +
+						"<option value='Hariharan_hangama'>Hariharan hangama</option>" +
+						"<option value='Ilayaraja_Hits'>Ilayaraja Hits</option>" +
+						"<option value='Kamal_hits'>Kamal hits</option>" +
+						"<option value='Latest'>Latest</option>" +
+						"<option value='Melodious_Love_Songs'>Melodious Love Songs</option>" +
+						"<option value='OLd_Melodious'>OLd Melodious</option>" +
+						"<option value='Prabudheva_Hits'>Prabudheva Hits</option>" +
+						"<option value='P_Suseela'>P Suseela</option>" +
+						"<option value='Rajini_Hits'>Rajini Hits</option>" +
+						"<option value='Spb_Chitra'>Spb Chitra</option>" +
+						"<option value='Spb_Janaki'>Spb Janaki</option>" +
+						"<option value='Surya_Hits'>Surya Hits</option>" +
+						"<option value='Tamil_Songs'>Tamil Songs</option>" +
+						"<option value='un_organized'>un organized</option>" +
+						"<option value='Vijay_Hits'>Vijay Hits</option>" +
+						"<option value='Yuvan_hits'>Yuvan Hits</option>" +
+						"<option value='Yuvan_melodious'>Yuvan Melodious</option>" +
+						"<option value='Yuvan_voice'>Yuvan Voice</option>" +
+						"<option value='All'>All</option>" +
+						"</select><button id='load-playlist'>Load My Plalist</button> " + 
+						"<button id='save-playlist'>Save Current Playlist</button></div><p id='ip_tag'></p>";
+
+									$(".top").append(folders);
+
+									$('#folder').on('change', function(){
+										songs_table.api().ajax.url("/songs_list/" + $(this).val() + ".list").load();
+									});                    
+
+
+				var myPlaylist = new jPlayerPlaylist({
+					jPlayer: "#jquery_jplayer_N",
+					cssSelectorAncestor: "#jp_container_N"
+				}, [
+					], {
+						playlistOptions: {
+							enableRemoveControls: true
+						},
+						swfPath: "/jqp/js",
+						supplied: "mp3",
+						smoothPlayBar: true,
+						keyEnabled: true,
+						audioFullScreen: false
+					});
+					$(document).on("click", ".play_song",function() {
+						myPlaylist.option("autoPlay", true);
+						myPlaylist.pause();
+						var song_info = new Array();
+						$.each($(this).parent().parent().children(), function(i,x){
+							if( i != 3){
+								song_info[i] = $(x).html();
+							}
+							else{
+								song_info[i] = $(x).find('a').attr('href');
+							}
+						});
+						myPlaylist.setPlaylist([{
+							title: song_info[2],
+							artist: song_info[0],
+							album: song_info[1],
+							mp3: song_info[3],
+						}]);
+					}
+			);
+
+			$("#clear_playlist").on("click",function() {
+				myPlaylist.remove();
+			});
+
+					$(document).on("click", ".add_song",function() {
+						var song_info = new Array();
+						$.each($(this).parent().parent().children(), function(i,x){
+							if( i != 3){
+								song_info[i] = $(x).html();
+							}
+							else{
+								song_info[i] = $(x).find('a').attr('href');
+							}
+						});
+						myPlaylist.add({
+							title: song_info[2],
+							artist: song_info[0],
+							album: song_info[1],
+							mp3: song_info[3],
+						});
+					});
+
+
+					$('#add_all_filtered').click(function() {
+						$.each($('#songs').find('tbody').children(),function(i,x){
+							$(x).find('.add_song').trigger('click')
+						});
+			});
+
+			$('#save-playlist').click(function() {
+				if(confirm("Are you sure?\nYour Previous playlist will be replaced.")){
+					$.post('/perl/playlist.pl',
+						{
+							action: "save" , 
+							data: JSON.stringify(myPlaylist.playlist)
+						},
+						function(){ 
+							alert("Playlist saved successfully")
+						});
+						return true;
+				}
+				return false;
+			});
+			$('#load-playlist').click(function() {
+				$.ajax({
+					type: "GET",
+					url: "/perl/playlist.pl",
+					dataType: "text",
+					success: function(data) {
+						myPlaylist.setPlaylist($.parseJSON(data));
+						return true;
+				}
+				});
+			});
+			}); 
+		</script>
+		</head><body>
+		<div style="width: 100%;">
+		<center>
+			<h3 id="header">Music on the local cloud <img alt=':)' src='/images/smile.gif'/></h3>
+			</center>
+			<div id="table" style="float: left; width: 60%; padding-left: 10px;"><br/>
+				<table id='songs' class="display">
+					<thead><tr><th>Artist</th><th>Album</th><th>Title</th><th>Play</th></tr></thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div id="player" style="float: left; width: auto; height: 91%; position: fixed; top: 35px; right: 5px; overflow: auto;">
+				<div id="jp_container_N" class="jp-video jp-video-270p">
+					<div class="jp-type-playlist">
+						<div id="jquery_jplayer_N" class="jp-jplayer"></div>
+						<div class="jp-gui">
+							<div class="jp-video-play">
+								<a href="javascript:;" class="jp-video-play-icon" tabindex="1">play</a>
+							</div>
+							<div class="jp-interface">
+								<div class="jp-progress">
+									<div class="jp-seek-bar">
+										<div class="jp-play-bar"></div>
+									</div>
+								</div>
+								<div class="jp-current-time"></div>
+								<div class="jp-duration"></div>
+								<div class="jp-details">
+									<ul>
+										<li><span class="jp-title"></span></li>
+									</ul>
+								</div>
+								<div class="jp-controls-holder">
+									<ul class="jp-controls">
+										<li><a href="javascript:;" class="jp-previous" tabindex="1">previous</a></li>
+										<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+										<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+										<li><a href="javascript:;" class="jp-next" tabindex="1">next</a></li>
+										<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+										<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+										<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
+										<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
+									</ul>
+									<div class="jp-volume-bar">
+										<div class="jp-volume-bar-value"></div>
+									</div>
+									<ul class="jp-toggles">
+										<li><a href="javascript:;" class="jp-full-screen" tabindex="1" title="full screen">full screen</a></li>
+										<li><a href="javascript:;" class="jp-restore-screen" tabindex="1" title="restore screen">restore screen</a></li>
+										<li><a href="javascript:;" class="jp-shuffle" tabindex="1" title="shuffle">shuffle</a></li>
+										<li><a href="javascript:;" class="jp-shuffle-off" tabindex="1" title="shuffle off">shuffle off</a></li>
+										<li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>
+										<li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="jp-playlist">
+							<ul>
+								<!-- The method Playlist.displayPlaylist() uses this unordered list -->
+								<li></li>
+							</ul>
+						</div>
+						<div class="jp-no-solution">
+							<span>Update Required</span>
+							To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+						</div>
+					</div>
+					<button id="add_all_filtered">Add Results to Playlist</button><button id="clear_playlist">Clear Playlist</button>
+				</div>
+			</div>
+			<center>
+				<h3 id="footer">&copy; Dinesh <img alt=':)' src='/images/smile.gif'/></h3>
+			</center>
+
+		</div>
+</body>
+</html>

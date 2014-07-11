@@ -16,7 +16,7 @@ This directory will contain all the perl CGI scripts.
 This is the configuration for apache
 ------------------------------------
 
-`
+```
 DocumentRoot /SongShare/view/
 ScriptAlias /perl/ /SongShare/cgi-bin/
 Alias /SongShare/songs/ /SongsShare/view/songs/
@@ -32,9 +32,9 @@ Alias /SongShare/songs/ /SongsShare/view/songs/
     Options -MultiViews ŠymLinksIfOwnerMatch
     Require all granted
 </Directory>
-`
+```
 
-Lecense
+License
 -------
 
 This is a simple html file and perl scripts with some basic configuration in apache. Its purely open source anybody can reuse it if really neede :).

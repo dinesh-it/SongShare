@@ -135,12 +135,9 @@ $(document).ready(function() {
     $('#save-playlist').click(function() {
         if (confirm("Are you sure?\nYour Previous playlist will be replaced.")) {
             $.post('/perl/playlist.pl', {
-                    action: "save",
-                    data: JSON.stringify(myPlaylist.playlist)
-                },
-                function() {
-                    alert("Playlist saved successfully")
-                });
+                action: "save",
+                data: JSON.stringify(myPlaylist.playlist)
+            });
             return true;
         }
         return false;

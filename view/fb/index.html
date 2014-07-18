@@ -2,37 +2,63 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>elFinder 2.0</title>
-
-		<!-- jQuery and jQuery UI (REQUIRED) -->
+		<title>Browse Songs</title>
+		<!--<title>elFinder 2.0</title>-->
 		<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css">
+		<style>
+			#header {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 30px;
+				line-height: 30px;
+				margin: 0px 0 0 0;
+				background: #f42555 url('/images/navbg.jpg');
+				border: solid 1px #EA2E5A;
+				font-family: 'PT Sans Narrow', sans-serif;
+				font-size: 1.2em;
+				color: white;
+			}
+			#footer {
+				top: 96%;
+				position: fixed;
+				left: 0;
+				width: 100%;
+				height: 25px;
+				line-height: 25px;
+				margin: 0px 0 0 0;
+				background: #f42555 url('/images/navbg.jpg');
+				border: solid 1px #EA2E5A;
+				font-family: 'PT Sans Narrow', sans-serif;
+				font-size: 1.2em;
+				color: white;
+			}
+		</style>
+
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
-
-		<!-- elFinder CSS (REQUIRED) -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/elfinder.min.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/theme.css">
-
-		<!-- elFinder JS (REQUIRED) -->
 		<script type="text/javascript" src="js/elfinder.min.js"></script>
-
-		<!-- elFinder translation (OPTIONAL) -->
 		<script type="text/javascript" src="js/i18n/elfinder.ru.js"></script>
-
-		<!-- elFinder initialization (REQUIRED) -->
 		<script type="text/javascript" charset="utf-8">
 			$().ready(function() {
 				var elf = $('#elfinder').elfinder({
 					url : 'php/connector.php'  // connector URL (REQUIRED)
-					// lang: 'ru',             // language (OPTIONAL)
 				}).elfinder('instance');
 			});
 		</script>
 	</head>
 	<body>
-
-		<!-- Element where elFinder will be created (REQUIRED) -->
-		<div id="elfinder" style="height="700px""></div>
-
+		<div style="width: 100%;">
+			<center>
+				<h3 id="header"><img alt=':)' src='/images/smile.gif'/> Welcome to my Local Cloud System <img alt=':)' src='/images/smile.gif'/></h3>
+				<br/><br/>
+				<!-- Element where elFinder will be created (REQUIRED) -->
+				<div id="elfinder" style="height="100%""></div>
+				<h3 id="footer">&copy; Dinesh</h3>
+			</center>
+		</div>
 	</body>
 </html>

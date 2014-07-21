@@ -41,7 +41,7 @@ $(document).ready(function() {
         "<option value='Arjun_hits'>Arjun hits</option>" +
         "<option value='A_R_Rahman'>A R Rahman</option>" +
         "<option value='collections'>collections</option>" +
-        "<option value='DHLIP_VARMAN'>DHLIP VARMAN</option>" +
+        "<option value='Dilip_Varman'>Dilip Varman</option>" +
         "<option value='Film_Wise'>Film Wise</option>" +
         "<option value='Hariharan_hangama'>Hariharan hangama</option>" +
         "<option value='Ilayaraja_Hits'>Ilayaraja Hits</option>" +

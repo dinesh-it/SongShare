@@ -46,7 +46,8 @@ $(document).ready(function() {
         "<option value='Hariharan_hangama'>Hariharan hangama</option>" +
         "<option value='Ilayaraja_Hits'>Ilayaraja Hits</option>" +
         "<option value='Kamal_hits'>Kamal hits</option>" +
-        "<option value='Latest'>Latest</option>" +
+        "<option value='Latest'>2015</option>" +
+        "<option value='Latest'>2014</option>" +
         "<option value='Melodious_Love_Songs'>Melodious Love Songs</option>" +
         "<option value='OLd_Melodious'>OLd Melodious</option>" +
         "<option value='Prabudheva_Hits'>Prabudheva Hits</option>" +
@@ -62,8 +63,13 @@ $(document).ready(function() {
         "<option value='Yuvan_melodious'>Yuvan Melodious</option>" +
         "<option value='Yuvan_voice'>Yuvan Voice</option>" +
         "<option value='All'>All</option>" +
-        "</select><button id='load-playlist'>Load My Plalist</button> " +
-        "<button id='save-playlist'>Save Current Playlist</button></div><p id='ip_tag'></p>";
+        "</select> <button id='load-playlist'>Load My Playlist</button> " +
+        "<button id='save-playlist'>Save Current Playlist</button> " + 
+        "<button id='download-playlist'>Download Current Playlist</button> " +
+        "<br/><a href='#' data-column='0' class='toggle-column'>Show Artist</a> " +
+        "<a href='#' data-column='1' class='toggle-column'>Show Album</a> " +
+		" </div> " +
+		"<p id='ip_tag'></p>";
 
     $(".top").append(folders);
 
@@ -134,7 +140,7 @@ $(document).ready(function() {
 
     $('#save-playlist').click(function() {
         if (confirm("Are you sure?\nYour Previous playlist will be replaced.")) {
-            $.post('/perl/playlist.pl', {
+            $.post('/perl/songs/playlist.pl', {
                 action: "save",
                 data: JSON.stringify(myPlaylist.playlist)
             });
@@ -142,15 +148,51 @@ $(document).ready(function() {
         }
         return false;
     });
+
     $('#load-playlist').click(function() {
         $.ajax({
             type: "GET",
-            url: "/perl/playlist.pl",
+            url: "/perl/songs/playlist.pl?action=load",
             dataType: "text",
             success: function(data) {
+				var songs = [];
+				songs_table.fnClearTable();
+				$.each($.parseJSON(data), function(i,song){
+					songs.push([song['artist'],song['album'],song['title'],song['mp3']]);
+				});
+				songs_table.fnAddData(songs);
                 myPlaylist.setPlaylist($.parseJSON(data));
                 return true;
             }
         });
     });
+
+	$('#download-playlist').click(function() {
+		var songs = myPlaylist.playlist;
+		if(songs.length > 50){
+			alert("You can download only 50 songs at a time. Requested playlist contains " + songs.length + " files");
+			return false;
+		}
+
+		$.ajax({ 
+			//method: "POST",
+			type: "POST",
+			url: '/perl/songs/playlist.pl',
+			data: {
+				action: "prepare",
+				data: JSON.stringify(songs),
+			},
+			success: function(data) {
+				alert(data + "Click ok to continue\n");
+				window.location = '/perl/songs/playlist.pl?action=download';
+			}
+		});
+	});
+
+	$('a.toggle-column').on( 'click', function (e) {
+		e.preventDefault();
+		var bVis = songs_table.fnSettings().aoColumns[$(this).attr('data-column')].bVisible;
+		songs_table.fnSetColumnVis($(this).attr('data-column'), bVis ? false : true );
+	});
+
 });

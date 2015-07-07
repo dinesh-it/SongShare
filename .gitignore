@@ -1,2 +1,5 @@
-/cgi-bin/playlist/*
+cgi-bin/playlist/*
 *.list
+view/songs_list/*
+view/training
+cgi-bin/training

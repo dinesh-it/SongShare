@@ -46,8 +46,9 @@ $(document).ready(function() {
         "<option value='Hariharan_hangama'>Hariharan hangama</option>" +
         "<option value='Ilayaraja_Hits'>Ilayaraja Hits</option>" +
         "<option value='Kamal_hits'>Kamal hits</option>" +
-        "<option value='Latest'>2015</option>" +
-        "<option value='Latest'>2014</option>" +
+        "<option value='2016'>2016</option>" +
+        "<option value='2015'>2015</option>" +
+        "<option value='2014'>2014</option>" +
         "<option value='Melodious_Love_Songs'>Melodious Love Songs</option>" +
         "<option value='OLd_Melodious'>OLd Melodious</option>" +
         "<option value='Prabudheva_Hits'>Prabudheva Hits</option>" +
